@@ -1,2 +1,2 @@
 # cosc242
-resources and complete labs for cosc242
+The paper resources and my answers to the labs for cosc242
