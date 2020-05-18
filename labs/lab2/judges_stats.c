@@ -13,8 +13,8 @@ double stddev(double *judge, double mean, int size){
      * samples and mean
      */
     for (i=0; i<size; i++){
-        printf("%f\n",variance);
         variance += pow(judge[i] - mean,2);
+        printf("%f\n",variance);
     }
    
     /* normalize variance*/
