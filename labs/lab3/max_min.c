@@ -1,14 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* given the memory addresses of two integers,
- * swap their values */
-void swap(int *x, int *y) {
-    int old_x = *x; /* get the values at address x */
-    *x = *y; /* the value at x gets the value at y. */
-    *y = old_x; /* y gets the old value of x */
-}
-
 void max_min(int *a, int n, int *max, int *min){
     /* we want to sort the array, and then
      * call swap on the max and min elements.
