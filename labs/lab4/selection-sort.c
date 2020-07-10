@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define ARRAY_MAX 10
+#define ARRAY_MAX 1000000
 
 void swap(int *x, int *y) {
     int temp = *x;

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define ARRAY_MAX 10
+#define ARRAY_MAX 4999050
 
 void insertion_sort(int *a, int n){
     
