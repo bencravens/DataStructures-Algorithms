@@ -1,0 +1,95 @@
+#!/usr/bin/env ruby
+
+# Generate and print some random numbers
+# Iain Hewson - February 2006
+
+require 'optparse'
+
+# default options
+count = 10
+minimum = 0
+maximum = 99
+oneline = sort = reverse = unique = false
+
+opt = OptionParser.new do |opts|
+   opts.banner = "Usage: #{$0} [options] [COUNT]"
+   opts.separator('')
+   opts.separator('Generate and print COUNT numbers (default 10)')
+   opts.separator('')
+   opts.on("-m", "--minimum N", Integer,
+      "Generate numbers >= N (default 0)") do |n|
+      minimum = n
+      end
+
+   opts.on("-M", "--maximum N", Integer,
+      "Generate numbers <= N (default 99)") do |n|
+      maximum = n
+      end
+
+   opts.on("-o", "--one-line", "Print all numbers on one line") do |n|
+      oneline = true
+   end
+
+   opts.on("-r", "--reversesort", "Sort into descending order") do |n|
+      reverse = true
+   end
+
+   opts.on("-s", "--sort", "Sort into ascending order") do |n|
+      sort = true
+   end
+
+   opts.on("-u", "--uniq", "Generate unique numbers") do |n|
+      unique = true
+   end
+
+   opts.on_tail("-h", "--help", "Show this message\n") do
+      puts opts
+      exit
+   end
+
+   begin
+      opts.parse!(ARGV)
+   rescue OptionParser::InvalidOption,OptionParser::InvalidArgument => e
+      $stderr.puts "Error: " + e + "\n\n"
+      $stderr.puts opts
+      exit
+   end
+end
+
+spread = maximum + 1 - minimum
+count = ARGV[0].to_i if ARGV[0].to_i != 0
+
+if sort and reverse
+   $stderr.puts "You can't sort into both ascending and descending order."
+   exit 1
+end
+
+if maximum < minimum
+   $stderr.puts "Error: maximum #{maximum} < minimum #{minimum}"
+   exit 1
+end
+
+if unique and spread < count
+   $stderr.puts "Error: Can't generate #{count} unique numbers between #{maximum} and #{minimum}"
+   exit 1
+end
+   
+numbers = []
+if unique
+   (minimum..maximum).each {|x| numbers << x}
+   numbers = numbers.sort_by {rand}
+   numbers = numbers[0...count]
+else
+   while numbers.size < count
+      numbers << rand(spread) + minimum
+   end
+end
+
+numbers.sort! if sort or reverse
+numbers.reverse! if reverse
+
+if oneline
+   puts numbers.join(' ')
+else
+   puts numbers
+end

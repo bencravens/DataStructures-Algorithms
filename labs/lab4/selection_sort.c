@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define ARRAY_MAX 10
 
@@ -47,12 +48,17 @@ void selection_sort(int *a, int n){
 int main(void) {
     int my_array[ARRAY_MAX];
     int i, count = 0;
+    clock_t start, end;
 
     while (count < ARRAY_MAX && 1 == scanf("%d", &my_array[count])) {
         count++;
     }
 
+    start = clock();
     selection_sort(my_array, count);
+    end = clock();
+
+    fprintf(stderr, "%d %f\n", count, (end - start) / (double)CLOCKS_PER_SEC);
 
     return EXIT_SUCCESS;
 }
