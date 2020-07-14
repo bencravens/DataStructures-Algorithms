@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define STRING_LEN 80
-#define ARRAY_LEN 3
+#define ARRAY_LEN 8
 
 void *emalloc(size_t s){
     void *result = malloc(s);
@@ -18,24 +18,25 @@ void insertion_sort(char *a[], int n){
     
     /*define variables for insertion sort...*/
     int i;
-    char key[STRING_LEN];
+    char *key;
     int j;
 
-    /*just trying to print the first letter of each word*/
+    /*just trying to print each word*/
     for (i=0;i<n;i++){
         printf("word is %s \n",a[i]);
     }
 
     /*use insertion sort to sort the array*/
     for (i=1;i<n;i++){
-        strcpy(key,a[i]);
+        key = a[i];
         j = i - 1;
-        while (j>=0 & strcmp(a[j],key)>0) {
+        while (j>=0 && strcmp(a[j],key)>0) {
             a[j+1] = a[j];
             j = j - 1;
         }
-        a[j+1] = key;
+        a[j+1]=key;
     }
+
 }
 
 int main(void) {
@@ -53,7 +54,6 @@ int main(void) {
     
     insertion_sort(wordlist, ARRAY_LEN);
 
-    /* now print out array */
     printf("printing sorted array \n");
     for(i=0;i<ARRAY_LEN;i++){
         printf("%s \n", wordlist[i]);
