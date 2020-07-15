@@ -3,7 +3,11 @@
 #include <string.h>
 
 #define STRING_LEN 80
+<<<<<<< HEAD
+#define ARRAY_LEN 10000
+=======
 #define ARRAY_LEN 8
+>>>>>>> 00b95ea70b1cc9258504e0e0ee3f63bf9dbf57fe
 
 void *emalloc(size_t s){
     void *result = malloc(s);
