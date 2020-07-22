@@ -1,3 +1,3 @@
 all:
-	gcc -W -Wall -O2 -ansi -pedantic -g lab_7_2.c -o output -lm
+	gcc -W -Wall -O2 -ansi -pedantic -g lab_7_3.c -o output -lm
 	./output
