@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define ARRAY_LEN 80
-#define NUM_WORDS 6
+#define NUM_WORDS 100
 
 void* emalloc(size_t n) {
     void* result = malloc(n);
