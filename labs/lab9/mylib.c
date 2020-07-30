@@ -20,6 +20,66 @@ void* erealloc(void* my_array, size_t n) {
     return result; 
 }
 
+void merge(int *array, int *workspace, int len){
+    /*point to beginning of left half*/
+    int i = 0;
+    /*poinr to beginning of right half*/
+    int j = len/2;
+    /*index indicating how many items have been sorted into result array*/
+    int k = 0;
+
+    /*while there are items remaining in both halves*/
+    while((i < len/2) && (j<len)){
+       if (array[i] < array[j]) {
+           workspace[k] = array[i];
+           i++;
+           k++;
+       } else {
+           workspace[k] = array[j];
+           j++;
+           k++;
+       }
+    }   
+   
+    /*first and second halves of array may not finish allocating to
+     * workspace at the same time, so now take care of leftover elements
+     * in the half arrays */
+
+    /*copy over remaining elements from left array to workspace*/
+    while(i < len/2){
+        workspace[k] = array[i];
+        i++;
+        k++;
+    }   
+    /*copy over remaining elements from right array to workspace*/
+    while(j < len){
+        workspace[k] = array[j];
+        j++;
+        k++;
+    }   
+}
+
+void merge_sort(int *array, int *workspace, int len){
+    int i;
+
+    if (len < 2) {
+        return;
+    }   
+    
+    /*call merge sort on first half of array*/
+    merge_sort(array,workspace,len/2);
+    /*call merge sort on second half of array*/
+    merge_sort(array + (len/2),workspace, len - (len/2));
+
+    merge(array,workspace,len);
+
+    /*now copy merged, sorted array into place*/
+    for(i=0;i<len;i++){
+        array[i] = workspace[i];
+    }
+}
+
+
 void insertion_sort(int *a, int n){
     
     /*define variables for insertion sort...*/

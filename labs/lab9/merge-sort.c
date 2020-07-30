@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "mylib.h"
+#include <math.h>
+#include <time.h>
 
-static void array_print(int *a, int n) {
-    int i;
+#define ARRAY_MAX 30000
 
-    for(i=0; i<n; i++) {
-        printf("%d\n", a[i]);
+/* n is the size of the array */
+void print_array(int *a, int n){
+    if (n > 0 ) {
+        printf("%d\n", a[0]);
+        print_array(a + 1, n - 1);
     }
 }
 
@@ -28,9 +31,9 @@ void merge(int *array, int *workspace, int len){
            workspace[k] = array[j];
            j++;
            k++;
-       }
+       } 
     }
-
+   
     /*first and second halves of array may not finish allocating to
      * workspace at the same time, so now take care of leftover elements
      * in the half arrays */
@@ -55,7 +58,7 @@ void merge_sort(int *array, int *workspace, int len){
     if (len < 2) {
         return;
     }
-
+    
     /*call merge sort on first half of array*/
     merge_sort(array,workspace,len/2);
     /*call merge sort on second half of array*/
@@ -70,46 +73,25 @@ void merge_sort(int *array, int *workspace, int len){
 }
 
 
-void insertion_sort(int *a, int n){
-    
-    /*define variables for insertion sort...*/
-    int i;
-    int key;
-    int j;
-
-    /*use insertion sort to sort the array*/
-    for (i=1;i<n;i++){
-        key = a[i];
-        j = i - 1;
-        while ((j>=0)&&(a[j]>key)) {
-            a[j+1] = a[j];
-            j = j - 1;
-        }
-        a[j+1] = key;
-    }
-    
-}
-
 int main(void) {
-    int capacity = 2;
-    int itemcount = 0;
-    int item;
-    int *my_array = emalloc(capacity * sizeof my_array[0]);
+    int my_array[ARRAY_MAX];
+    int workspace[ARRAY_MAX];
+    int count = 0;
+    clock_t start, end;
 
-    while (1==scanf("%d", &item) && (capacity < 10)) {
-        if (itemcount == capacity) {
-            capacity += capacity;
-            my_array = erealloc(my_array, capacity * sizeof my_array[0]);
-        }
-        my_array[itemcount++] = item;
+    while (count < ARRAY_MAX && 1 == scanf("%d", &my_array[count])) {
+        count++;
     }
 
-    printf("-------unsorted array-----\n\n");
-    array_print(my_array, itemcount);
-    insertion_sort(my_array,itemcount);
-    printf("-------sorted array-------\n\n");
-    array_print(my_array, itemcount);
-    free(my_array);
+    start = clock();
+    merge_sort(my_array, workspace, count);
+    stop = clock();
+
+    printf("printing array now! \n");
+
+    print_array(&my_array[0],count);
+
+    fprintf( stderr, "%d %f\n", count, (end - start) / (double)CLOCKS_PER_SEC);
 
     return EXIT_SUCCESS;
 }

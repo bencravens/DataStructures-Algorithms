@@ -36,7 +36,8 @@ void flexarray_print(flexarray f) {
 }
 
 void flexarray_sort(flexarray f) {
-    insertion_sort(f->items,f->itemcount);
+    int* workspace = emalloc(f->itemcount * sizeof f->items[0]);
+    merge_sort(f->items,workspace,f->itemcount);
 }
 
 void flexarray_free(flexarray f) {
