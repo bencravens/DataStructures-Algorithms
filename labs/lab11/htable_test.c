@@ -1,17 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "mylib.h"
 #include "htable.h"
+#include <cstdlib>
 
 int main(void) {
-    htable my_htable = htable_new(9);
-    htable_insert(my_htable,"test");
-    htable_insert(my_htable,"test");
-    htable_insert(my_htable,"hellomate aaa aaaa aaaaa");
-    htable_insert(my_htable,"test1");
-    htable_insert(my_htable,"test2");
-    htable_insert(my_htable,"test3");
-    htable_insert(my_htable,"ben cravens is cool");
-    htable_print(my_htable,stdout);
-    htable_free(my_htable);
+    
+    int capacity = atoi(argv[1]);
+
+    htable h = htable_new(capacity);
+    char word[256];
+
+    while (getword(word, sizeof word, stdin) != EOF) {
+        htable_insert(h, word);
+    }
+
+    htable_print(h, stdout);
+    htable_free(h);
+
     return EXIT_SUCCESS;
 }

@@ -60,12 +60,9 @@ int htable_insert(htable h, char* str){
     int index = myint % h->capacity;
     int i;
 
-    /* now we try to insert into hash table */
-    printf("INSERTING %s INTO HASH TABLE\n",str);
 
     /* not allowed to if the hash table is full... */
     if (h->num_keys >= h->capacity) {
-        printf("capacity reached...\n");
         return 0;
     }
 
@@ -73,14 +70,12 @@ int htable_insert(htable h, char* str){
     /*reallocate memory first (string may be longer)*/
  
     if (h->keys[index]==NULL){
-        printf("no string at this index, just inserting\n");
         h->keys[index] = emalloc((strlen(str)+1) * sizeof str[0]);
         strcpy(h->keys[index],str);
         h->frequencies[index]++;
         h->num_keys++;
         return 1;
     } else if ((strcmp(h->keys[index],str)==0)) {
-        printf("string already exists at this index\n");
         h->frequencies[index]++;
         return 1;
     } else {
@@ -89,20 +84,17 @@ int htable_insert(htable h, char* str){
             /* may need to wrap around to beginning of table again... */
             i = (i+1)%(h->capacity);
             if (h->keys[i]==NULL){
-                printf("no string at this index, just inserting\n");
                 h->keys[i] = emalloc((strlen(str)+1) * sizeof str[0]);
                 strcpy(h->keys[i],str);
                 h->frequencies[i]++;
                 h->num_keys++;
                 return 1;
             } else if ((strcmp(h->keys[i],str)==0)) {
-                printf("string already exists at this i\n");
                 h->frequencies[i]++;
                 return 1;
             }
         } while (i%index!=0); /*stop when we reach where we were*/
         /*looks like hash table is full... return zero*/
-        printf("hash table full...\n");
         return 0;
     }
     /*if the same string is already there */
