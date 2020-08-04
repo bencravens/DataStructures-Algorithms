@@ -93,7 +93,7 @@ int htable_insert(htable h, char* str){
                 h->frequencies[i]++;
                 return 1;
             }
-        } while (i%index!=0); /*stop when we reach where we were*/
+        } while (i!=index); /*stop when we reach where we were*/
         /*looks like hash table is full... return zero*/
         return 0;
     }
