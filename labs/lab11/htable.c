@@ -20,6 +20,10 @@ static unsigned int htable_word_to_int(char *word) {
     return result;
 }
 
+static unsigned int htable_step(htable h, unsigned int i_key) {
+    return 1 + (i_key % (h->capacity - 1));
+}
+
 htable htable_new(int capacity) {
     int i;
     htable result = emalloc(sizeof result[0]);
@@ -59,10 +63,12 @@ int htable_insert(htable h, char* str){
     /* use hash function h(k) = k mod M (M is capacity) */
     int index = myint % h->capacity;
     int i;
-
+    /*step used in double hashing*/
+    int step;
 
     /* not allowed to if the hash table is full... */
     if (h->num_keys >= h->capacity) {
+        fprintf(stderr,"hash table is full... \n");
         return 0;
     }
 
@@ -82,7 +88,9 @@ int htable_insert(htable h, char* str){
         i = index;
         do {
             /* may need to wrap around to beginning of table again... */
-            i = (i+1)%(h->capacity);
+            /*double hashing*/
+            step = htable_step(h, i);
+            i = (i + step)%(h->capacity);
             if (h->keys[i]==NULL){
                 h->keys[i] = emalloc((strlen(str)+1) * sizeof str[0]);
                 strcpy(h->keys[i],str);
@@ -111,3 +119,28 @@ void htable_print(htable h, FILE* stream) {
         }
     }
 }
+
+int htable_search(htable h, char* key) {
+    int step;
+    int collisions = 0;
+    /* convert input string to int */
+    long myint = htable_word_to_int(key);
+    /* use hash function h(k) = k mod M (M is capacity) */
+    int index = myint % h->capacity;
+    int i=index;
+
+    while (h->keys[i] != NULL && strcmp(key, h->keys[i])!=0 && collisions < h-> capacity) {
+        /*double hashing*/
+        step = htable_step(h, i); 
+        i = (i+step)%h->capacity;
+        collisions++;
+    }
+    
+    if (collisions == h->capacity) {
+        return 0;
+    } else {
+        return h->frequencies[i];
+    }
+}
+
+
