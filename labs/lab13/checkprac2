@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# This script runs a program (given as first argument) taking input from
+# each file in $testdir/infiles and compares the output to the same named
+# file in $testdir/outfiles.
+# 
+# You can change the value of $testdir by giving  second and third arguments
+# of -d and <directory-name>.
+
+testdir=/home/cshome/coursework/242/tests/lab12
+
+if [ ! -x "$1" ]; then
+   echo "Usage: $0 <program-name>"
+   echo \'"$1"\' does not exist or can not be executed
+   exit 1
+fi
+
+# use alternative directory to get testfiles from
+if [ "$2" == "-d" -a -d "$3" ]; then
+   testdir=$3
+fi
+
+prog=$1
+indir=${testdir}/infiles
+outdir=${testdir}/outfiles
+tmpfile=temporary-resultfile
+
+declare -i numtests=$(ls ${indir} 2>/dev/null | wc -w)
+echo "Running black box tests"
+echo "-----------------------"
+echo "Test directory = $indir"
+echo "Number of testfiles = $numtests"
+
+if [ "$numtests" -gt "0" ]; then
+   echo
+fi
+
+for file in $(eval ls ${indir} 2>/dev/null)
+do
+   if [ ${file%\~} != ${file} ]; then # ignore ~ files
+      continue
+   fi
+      if [ ! -f ${outdir}/${file} ]; then
+         echo Error: no match for ${file} found in \
+            directory "'"${outdir##*/}"'"
+         continue
+      fi
+      ./$prog < ${indir}/${file} >| ${tmpfile}
+      diff ${tmpfile} ${outdir}/${file} > /dev/null
+      if [ "$?" -ne "0" ]; then
+         echo ${file} failed!
+         echo
+         echo Showing difference for ${file}
+         echo "< your output"
+         echo "> expected output"
+         echo
+         diff ${tmpfile} ${outdir}/${file}
+         echo
+      else
+         echo ${file} passed.
+      fi
+done

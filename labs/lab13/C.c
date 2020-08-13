@@ -1,29 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void repeats(int* my_array, int n) {
-    int i=0;
-    int* frequencies = malloc(n * sizeof frequencies[0]);
-
-    /* initialize frequencies with zeros */
-    for (i=0;i<n;i++) {
-        frequencies[i] = 0;
+void repeats(int* a, int n) {
+    int* freq;
+    int i;
+    int index;
+    
+    freq = malloc(n * sizeof freq[0]);
+    if (NULL == freq) {
+        fprintf(stderr, "memory allocation failed!\n");
     }
 
-    /* now count the frequencies of each int in the range [0,(n-1)]
-     */
     for (i=0;i<n;i++) {
-        int cur = my_array[i];
-        /*increment the corresponding frequency*/
-        frequencies[cur]++;
+        /*initialize frequencies to zero*/
+        freq[i] = 0;
     }
 
-    /*now print out frequencies*/
     for (i=0;i<n;i++) {
-        printf("%d occurs %d times\n",i,frequencies[i]);
+        /*increment the index corresponding to our num*/
+        index = a[i];
+        freq[index]++;
     }
 
-    free(frequencies);
+    for (i=0;i<n;i++) {
+        /*print repeats*/
+        if (freq[i] > 1) {
+            printf("%d occurs %d times\n",i,freq[i]);
+        }
+    }
+    free(freq);
+    return ;
 }
 
 int main(void) {
@@ -31,20 +37,17 @@ int main(void) {
     int *my_array;
     int i = 0;
 
-    printf("Enter the size of the array: ");
+    printf("Enter the size of the array:\n");
     scanf("%d", &array_size);
-
     my_array = malloc(array_size * sizeof my_array[0]);
     if (NULL == my_array) {
         fprintf(stderr, "memory allocation failed!\n");
         return EXIT_FAILURE;
     }
 
-
     for (i=0; i<array_size; i++) {
         my_array[i] = rand() % array_size;
     }
-
     printf("What's in the array:\n");
     for (i=0; i<array_size; i++) {
         printf("%d ", my_array[i]);
