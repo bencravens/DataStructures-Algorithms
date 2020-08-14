@@ -8,60 +8,63 @@ struct flexarrayrec {
     int* items;
 };
 
-void* emalloc(size_t n) {
-    void* result = malloc(n);
-    if (result==NULL) {
-        fprintf(stderr,"memory allocation failed.");
-        exit(EXIT_FAILURE);
-    }
-    return result;
-}
-
-void* erealloc(void* my_array, size_t n) {
-    void* result = realloc(my_array, n);
-    if (result==NULL) {
-        fprintf(stderr,"memory reallocation failed.");
-        exit(EXIT_FAILURE);
-    }
-    return result;
-}
-
-void insertion_sort(int* a, int n) {
+void insertion_sort(int* a, int len) {
     int i;
     int j;
-    int key; /*element to be "inserted" in sorted list*/
+    int key;
 
-    for(i=1;i<n;i++) {
-        /*the first element is automatically "sorted"*/
+    for (i=1;i<len;i++) {
         key = a[i];
         j = i - 1;
-        /* iterate through the sorted list, and move each entry along one index
-         * until we find an entry smaller than the key, at which point we 
-         * insert the key into the sorted list. */
-        while (j>=0 && a[j] > key) {
-            a[j+1] = a[j]; 
-            j = j - 1;
-        }
+        while (key < a[j] && j>=0 ) {
+            /*shift all elements to the left of key up (as long as they are less than key)*/
+            a[j+1] = a[j];
+            j--; 
+        }   
+        /*now put key in place*/
         a[j+1] = key;
+    }   
+}
+
+void* emalloc(size_t n) {
+    void* result = malloc(n);
+    if (result == NULL) {
+        fprintf(stderr,"memory allocation failed.\n");
+        exit(EXIT_FAILURE);
     }
+    return result;
+}
+
+void* erealloc(int* a, size_t n) {
+    void* result = realloc(a,n);
+    if (result==NULL) {
+        fprintf(stderr,"memory reallocation failed.\n");
+        exit(EXIT_FAILURE);
+    }
+    return result;
 }
 
 flexarray flexarray_new() {
     flexarray result = emalloc(sizeof *result);
-    result->capacity = 2;
-    result->itemcount = 0;
+    result->capacity=2;
+    result->itemcount=0;
     result->items = emalloc(result->capacity * sizeof result->items[0]);
     return result;
 }
 
 void flexarray_append(flexarray f, int num) {
-    if (f->capacity == f->itemcount) {
-        /*array is full... must reallocate*/
-        f->capacity = 2*(f->capacity);
+    /*reached capacity, reallocate*/
+    if (f->itemcount==f->capacity) {
+        f->capacity=2*(f->capacity);
         f->items = erealloc(f->items, f->capacity * sizeof f->items[0]);
     }
+    /*add new item*/
     f->items[f->itemcount] = num;
     f->itemcount++; 
+}
+
+void flexarray_sort(flexarray f) {
+    insertion_sort(f->items, f->itemcount);
 }
 
 void flexarray_print(flexarray f) {
@@ -69,10 +72,6 @@ void flexarray_print(flexarray f) {
     for(i=0;i<f->itemcount;i++) {
         printf("%d\n",f->items[i]);
     }
-}
-
-void flexarray_sort(flexarray f) {
-    insertion_sort(f->items, f->itemcount);
 }
 
 void flexarray_free(flexarray f) {
