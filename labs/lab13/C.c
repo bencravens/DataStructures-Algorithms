@@ -1,36 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void repeats(int* a, int n) {
-    int* freq;
+
+void repeats(int* a, int len) {
+    int* frequencies = malloc(len * sizeof frequencies[0]);
     int i;
-    int index;
-    
-    freq = malloc(n * sizeof freq[0]);
-    if (NULL == freq) {
-        fprintf(stderr, "memory allocation failed!\n");
+        
+    /*count frequencies*/
+    for (i=0;i<len;i++) {
+        frequencies[a[i]]++;
     }
 
-    for (i=0;i<n;i++) {
-        /*initialize frequencies to zero*/
-        freq[i] = 0;
-    }
-
-    for (i=0;i<n;i++) {
-        /*increment the index corresponding to our num*/
-        index = a[i];
-        freq[index]++;
-    }
-
-    for (i=0;i<n;i++) {
-        /*print repeats*/
-        if (freq[i] > 1) {
-            printf("%d occurs %d times\n",i,freq[i]);
+    for (i=0;i<len;i++) {
+        if (frequencies[i] > 1) {
+            printf("%d occurs %d times\n",i,frequencies[i]);
         }
     }
-    free(freq);
-    return ;
+        
+    free(frequencies);
+
 }
+
 
 int main(void) {
     int array_size = 0;
