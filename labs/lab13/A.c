@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int is_prime (int num) {
+int is_prime(int num) {
     int i;
     for (i=2;i<num;i++) {
         if (num%i==0) {
@@ -13,12 +13,12 @@ int is_prime (int num) {
 
 int main(void) {
     int num = 2;
-    int nums_printed = 0;
-    while (nums_printed < 200) {
+    int num_printed = 0;
+    while (num_printed < 200) {
         if (is_prime(num)) {
+            num_printed++;
             printf("%5d",num);
-            nums_printed++;
-            if (nums_printed%10==0) {
+            if (num_printed%10==0) {
                 printf("\n");
             }
         }
