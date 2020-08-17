@@ -3,22 +3,18 @@
 
 
 void repeats(int* a, int len) {
-    int* frequencies = malloc(len * sizeof frequencies[0]);
-    int i;
-        
-    /*count frequencies*/
+    int* freq = malloc(len * sizeof freq[0]);
+    int i;    
+
     for (i=0;i<len;i++) {
-        frequencies[a[i]]++;
+        freq[a[i]]++;
     }
 
     for (i=0;i<len;i++) {
-        if (frequencies[i] > 1) {
-            printf("%d occurs %d times\n",i,frequencies[i]);
+        if (freq[i] > 1) {
+            printf("%d occurs %d times\n",i,freq[i]);
         }
     }
-        
-    free(frequencies);
-
 }
 
 
