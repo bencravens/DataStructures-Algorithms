@@ -15,20 +15,21 @@ void swap(int* x, int* y) {
 }
 
 void selection_sort(int* a, int len) {
-    int i,boundary;
-    int min; /*index of minimum in unsorted list*/
-    /*let j be our boundary*/
-    for(boundary=0;boundary<len;boundary++) {
+    int i;
+    int boundary=0;
+    int min;
+    while (boundary < len) {    
         min = boundary;
-        for (i=boundary+1;i<len;i++) {
+        for (i=boundary;i<len;i++) {
             if (a[i] < a[min]) {
                 min = i;
             }
         }
-        if (min != boundary) {
-            swap(&a[min],&a[boundary]);
+        if (min!=boundary) {
+            swap(&a[boundary],&a[min]);
         }
-    }    
+        boundary++;
+    }
 }
 
 void* emalloc(size_t n) {
