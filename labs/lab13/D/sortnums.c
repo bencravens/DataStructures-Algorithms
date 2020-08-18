@@ -4,14 +4,16 @@
 
 int main(void) {
     /*initialize flexarray*/
+    int num;
     flexarray flexy = flexarray_new();
-    int i;
 
-    while(1==scanf("%d",&i)) {
-        flexarray_append(flexy,i);
+    while(1==scanf("%d",&num)) {
+        flexarray_append(flexy,num);
     }
+
     flexarray_sort(flexy);
     flexarray_print(flexy);
     flexarray_free(flexy);
+
     return EXIT_SUCCESS;
 }
