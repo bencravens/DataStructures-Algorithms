@@ -10,37 +10,37 @@ double smaller(double a, double b) {
 }
 
 double bigger(double a, double b) {
-    if (a > b) {
+    if (a > b) { 
         return a;
     } else {
         return b;
-    }
+    } 
 }
 
 int main(void) {
-    double s1,s2,s3;
+    double s1, s2, s3;
+    int id;
+    int winner_id;
     double min;
     double score;
-    int id;
-    double max = 0;
-    int max_id;
+    double winner_score=0;
     
-    while (4==scanf("%d%lg%lg%lg",&id,&s1,&s2,&s3)) {
+    while(4==scanf("%d%lg%lg%lg",&id,&s1,&s2,&s3)) {
         min = smaller(s1,smaller(s2,s3));
-        if (s1 == min) {
-            score = (s2 + s3) / 2;
-        } else if (s2 == min) {
-            score = (s1 + s3) / 2;
-        } else {
-            score = (s1 + s2) / 2;
+        if (min==s1) {
+            score = (s2 + s3)/2;
+        } else if (min==s2) {
+            score = (s1 + s3)/2;
+        } else { 
+            score = (s1 + s2)/2;
         } 
-        if (score > max) {
-            max = score;
-            max_id = id;
+        if (score > winner_score) {
+            winner_score = score;
+            winner_id = id;
         }
     }
+
+    printf("%d\n",winner_id);
     
-    printf("%d\n",max_id);
- 
     return EXIT_SUCCESS;
-}   
+}
