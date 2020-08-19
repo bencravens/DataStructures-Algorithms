@@ -3,12 +3,12 @@
 
 
 void repeats(int* a, int len) {
-    int i;
     int* freqs = malloc(len * sizeof freqs[0]);
     if (NULL == freqs) {
-        fprintf(stderr,"memory allocation failed\n");
+        fprintf(stderr, "memory allocation failed!\n");
         exit(EXIT_FAILURE);
-    }
+    }  
+    int i;
     for (i=0;i<len;i++) {
         freqs[a[i]]++;
     }
