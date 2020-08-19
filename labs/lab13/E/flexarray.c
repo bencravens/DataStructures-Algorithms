@@ -16,11 +16,11 @@ void swap(int* x, int* y) {
 
 void selection_sort(int* a, int len) {
     int i;
-    int boundary = 0;
+    int boundary=0;
     int min;
     while (boundary < len) {
         min = boundary;
-        for (i=boundary;i<len;i++) {
+        for(i=boundary;i<len;i++) {
             if (a[i] < a[min]) {
                 min = i;
             }
