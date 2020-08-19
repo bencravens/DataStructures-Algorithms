@@ -13,7 +13,8 @@ int main(void) {
 
     flexarray_sort(flexy);
     flexarray_print(flexy);
+    
     flexarray_free(flexy);
-
+    
     return EXIT_SUCCESS;
 }

@@ -10,14 +10,14 @@ struct flexarrayrec {
 
 void insertion_sort(int* a, int len) {
     int i;
-    int key;
     int j;
+    int key;
     for(i=1;i<len;i++) {
-        key = a[i];
         j = i - 1;
-        while (j>=0 && key < a[j]) {
+        key = a[i];
+        while(j>=0 && key<a[j]) {
             a[j+1] = a[j];
-            j = j - 1;
+            j = j-1;
         }
         a[j+1] = key;
     }
@@ -26,17 +26,15 @@ void insertion_sort(int* a, int len) {
 void* emalloc(size_t n) {
     void* result = malloc(n);
     if (result == NULL) {
-        fprintf(stderr,"memory allocation failed.\n");
-        exit(EXIT_FAILURE);
-    }
+        fprintf(stderr,"malloc fail\n");
+    } 
     return result;
 }
 
 void* erealloc(int* a, size_t n) {
     void* result = realloc(a,n);
     if (result == NULL) {
-        fprintf(stderr, "memory reallocation failed.\n");
-        exit(EXIT_FAILURE);
+        fprintf(stderr, "realloc fail\n");
     }
     return result;
 }
@@ -51,8 +49,8 @@ flexarray flexarray_new() {
 
 void flexarray_append(flexarray f, int num) {
     if (f->capacity == f->itemcount) {
-        f->capacity = 2*f->capacity;
-        f->items = realloc(f->items,f->capacity * sizeof f->items[0]);
+        f->capacity = 2 * f->capacity;
+        f->items = erealloc(f->items, f->capacity * sizeof f->items[0]);
     }
     f->items[f->itemcount] = num;
     f->itemcount++;
