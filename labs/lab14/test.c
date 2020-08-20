@@ -25,5 +25,11 @@ int main(void) {
     } 
     printf("printing all now\n");
     bst_inorder(b,print_key);
+    printf("is \"test\" in the tree?\n");
+    if (bst_search(b,"test")) {
+        printf("yes!\n");
+    } else {
+        printf("no!\n");
+    }
     return EXIT_SUCCESS;
 }
