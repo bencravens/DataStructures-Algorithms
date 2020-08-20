@@ -22,6 +22,8 @@ void* erealloc(void* my_array, size_t n) {
     return result; 
 }
 
+
+
 int getword(char *s, int limit, FILE *stream) {
     int c;
     char *w = s;

@@ -25,11 +25,14 @@ int main(void) {
     } 
     printf("printing all now\n");
     bst_inorder(b,print_key);
-    printf("is \"test\" in the tree?\n");
-    if (bst_search(b,"test")) {
-        printf("yes!\n");
-    } else {
-        printf("no!\n");
+    bst_delete(b,"apple");
+    printf("now tree looks like this:\n");
+    bst_inorder(b,print_key);
+    printf("deleting all now\n");
+    b = bst_free(b);
+    /*now freeing list of words*/
+    for(i=0;i<num_words;i++) {
+        free(word_list[i]);
     }
     return EXIT_SUCCESS;
 }
