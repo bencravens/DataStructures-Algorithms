@@ -13,11 +13,11 @@ void insertion_sort(int* a, int len) {
     int j;
     int key;
     for(i=1;i<len;i++) {
-        j = i - 1;
         key = a[i];
+        j = i - 1;
         while(j>=0 && key<a[j]) {
             a[j+1] = a[j];
-            j = j-1;
+            j=j-1;
         }
         a[j+1] = key;
     }
@@ -27,14 +27,14 @@ void* emalloc(size_t n) {
     void* result = malloc(n);
     if (result == NULL) {
         fprintf(stderr,"malloc fail\n");
-    } 
+    }
     return result;
 }
 
 void* erealloc(int* a, size_t n) {
     void* result = realloc(a,n);
     if (result == NULL) {
-        fprintf(stderr, "realloc fail\n");
+        fprintf(stderr,"realloc fail\n");
     }
     return result;
 }
@@ -63,12 +63,10 @@ void flexarray_sort(flexarray f) {
 
 void flexarray_print(flexarray f) {
     int i;
-    for(i=0;i<f->itemcount;i++) {
+    for (i=0;i<f->itemcount;i++) {
         printf("%d\n",f->items[i]);
     }
 }
 
 void flexarray_free(flexarray f) {
-    free(f->items);
-    free(f);
 }

@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int isprime(int num) {
+int isprime(int n) {
     int i;
-    for (i=2;i<num;i++) {
-        if (num%i==0) {
+    for(i=2;i<n;i++) {
+        if (n%i==0) {
             return 0;
         }
     }
@@ -13,12 +13,12 @@ int isprime(int num) {
 
 int main(void) {
     int num = 2;
-    int nums_printed = 0;
-    while (nums_printed < 200) {
+    int num_printed = 0;
+    while (num_printed < 200) {
         if (isprime(num)) {
             printf("%5d",num);
-            nums_printed++;
-            if (nums_printed%10==0) {
+            num_printed++;
+            if (num_printed%10==0) {
                 printf("\n");
             }
         }

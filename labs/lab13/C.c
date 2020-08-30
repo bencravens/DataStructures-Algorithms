@@ -1,15 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 void repeats(int* a, int len) {
-    int* freqs = malloc(len * sizeof freqs[0]);
-    if (NULL == freqs) {
-        fprintf(stderr, "memory allocation failed!\n");
-        exit(EXIT_FAILURE);
-    }  
     int i;
-    for (i=0;i<len;i++) {
+    int* freqs = malloc(len * sizeof freqs[0]);
+    for (i=0;i<len;i++){
         freqs[a[i]]++;
     }
     for (i=0;i<len;i++) {
@@ -19,7 +14,6 @@ void repeats(int* a, int len) {
     }
     free(freqs);
 }
-
 
 int main(void) {
     int array_size = 0;
