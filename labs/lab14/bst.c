@@ -21,6 +21,11 @@ void* emalloc(size_t n) {
     return result;
 }
 
+/*return a bst node pointer*/
+struct bst_node* talloc(void) {
+    return (struct bst_node * ) emalloc(sizeof(struct bst_node));
+}
+
 bst bst_new() {
     return NULL;
 }
@@ -28,26 +33,30 @@ bst bst_new() {
 void bst_inorder(bst b, void f(char* str)) {
     if (b==NULL) {
         return;
+    } else {
+        bst_inorder(b->left,f);
+        f(b->key);
+        bst_inorder(b->right,f);
     }
-    bst_inorder(b->left,f);
-    f(b->key);
-    bst_inorder(b->right,f);
 }
 
 void bst_preorder(bst b, void f(char* str)) {
     if (b==NULL) {
         return;
+    } else {
+        f(b->key);
+        bst_preorder(b->left,f);
+        bst_preorder(b->right,f);
     }
-    f(b->key);
-    bst_preorder(b->left,f);
-    bst_preorder(b->right,f);
 }
 
 bst bst_insert(bst b, char* str) {
     if (b==NULL) {
-        b = emalloc(sizeof *b);
+        b = talloc();
         b->key = emalloc((strlen(str)+1) * sizeof str[0]);
         strcpy(b->key, str);
+        b->left = NULL;
+        b->right = NULL;
     } else if (strcmp(b->key,str)==0) {
         ;
     } else if (strcmp(str,b->key)<0) {
@@ -98,13 +107,19 @@ bst bst_delete(bst b, char* str) {
         } else if ((b->left == NULL) ^ (b->right == NULL)) {
             /*if it is the left node that is null*/
             if (b->left == NULL) {
-                free(b->key);
-                free(b);
-                b = b->right;
+                char* str = b->right->key;
+                b->key = realloc(b->key,((strlen(str)+1)*sizeof str[0]));
+                strcpy(b->key,str);
+                free(b->right->key);
+                free(b->right);
+                b->right = NULL;
             } else {
-                free(b->key);
-                free(b);
-                b = b->left;
+                char* str = b->left->key;
+                b->key = realloc(b->key,((strlen(str)+1)*sizeof str[0]));
+                strcpy(b->key,str);
+                free(b->left->key);
+                free(b->left);
+                b->left = NULL;
             }
         /* oops, it is actually the case that the node has two children... */
         } else {
@@ -130,8 +145,12 @@ bst bst_free(bst b) {
     if (b==NULL) {
         return b;
     }
-    bst_free(b->right);
-    bst_free(b->left);
+    if (b->left != NULL) {
+        b->left = bst_free(b->left);
+    }
+    if (b->right != NULL) {
+        b->right = bst_free(b->right);
+    }
     free(b->key);
     free(b);
     return b;
