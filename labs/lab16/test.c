@@ -16,13 +16,7 @@ int main(void) {
 
     printf("\n\n\n\n\n-----------------------\n\n\n\n");
 
-    rbt_preorder(b,print_key);
-    printf("now right rotating tree\n");
-    b = right_rotate(b);
-    rbt_preorder(b,print_key);
-    printf("now rotating tree back to the left\n");
-    b = left_rotate(b);
-    rbt_preorder(b,print_key);
+    rbt_preorder(b);
     rbt_free(b);
 
     return EXIT_SUCCESS;
