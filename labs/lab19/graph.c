@@ -1,16 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "queue.h"
 #include "graph.h"
 #include "mylib.h"
 
 typedef enum { UNVISITED, VISITED_SELF, VISITED_ALL } state_t;
-typedef struct vertex;
 
-struct vertex {
+struct vertexrec {
     int prev;
     int distance;
-    state_t state; 
+    int id;
+    state_t state;
 };
 
 struct graphrec {
@@ -38,7 +39,7 @@ graph graph_new(int num_nodes) {
             G->edges[i][j] = 0;
         }
     }  
-    /*initialize vertices...*/
+    /*initialize vertex...*/
     G->vertices = emalloc(num_nodes * sizeof G->vertices[0]);
     /*return G*/
     return G;
@@ -48,6 +49,9 @@ graph graph_free(graph G) {
     int i;
     
     /*free vertices*/
+    for(i=0;i<G->size;i++) {
+        free(G->vertices[i]);
+    }
     free (G->vertices);
 
     /*free edge matrix*/
@@ -89,4 +93,48 @@ void print_graph(graph G) {
         }
         printf("\n");
     }
-}  
+    printf("vertices:\n");
+    printf("vertex distance pred\n");
+    for (i=0;i<G->size;i++) {
+        printf("%d     %d     %d\n",i,G->vertices[i]->distance,G->vertices[i]->prev);
+    }
+}
+
+void graph_bfs(graph G, int source) {
+    /*initialize queue*/
+    int size;
+    int i;
+    queue Q = queue_new();     
+    /*vertex ids for algorithm*/
+    int u;
+    int v;
+    /*initialize vertices*/
+    for (i=0;i<G->size;i++) {
+        G->vertices[i] = emalloc(sizeof *G->vertices[i]);
+        G->vertices[i]->prev = -1;
+        G->vertices[i]->distance = -1;
+        G->vertices[i]->id = i;
+        G->vertices[i]->state = UNVISITED;
+    }
+    /*initialize source*/
+    G->vertices[source]->state = VISITED_SELF;
+    G->vertices[source]->distance = 0;
+    enqueue(Q,source);
+    size = queue_size(Q);
+    printf("queue is size %d\n",size);
+    while(size>0) {
+        u = (int) dequeue(Q); /*dequeued vertex*/
+        for (v=0;v<G->size;v++) {
+            /*visit each node v adjacent to u which has not been visited already...*/
+            if(G->edges[u][v]==1 && G->vertices[v]->state==UNVISITED) {
+                G->vertices[v]->state = VISITED_SELF;
+                G->vertices[v]->distance = G->vertices[u]->distance + 1;
+                G->vertices[v]->prev = u;
+                enqueue(Q,v);
+            }
+        }
+        G->vertices[u]->state = VISITED_ALL;
+        size = queue_size(Q);
+    }
+    free(Q);
+} 
