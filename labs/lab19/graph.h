@@ -14,5 +14,7 @@ extern graph    graph_add_2edge(graph G, int u, int v);
 extern void     print_graph(graph G);
 extern graph    graph_free(graph G);
 extern void     graph_bfs(graph G, int source);
+extern void     graph_dfs(graph G);
+extern void     visit(graph G, int v);
 
 #endif

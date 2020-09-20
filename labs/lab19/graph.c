@@ -5,12 +5,15 @@
 #include "graph.h"
 #include "mylib.h"
 
+static int step;
+
 typedef enum { UNVISITED, VISITED_SELF, VISITED_ALL } state_t;
 
 struct vertexrec {
     int prev;
     int distance;
     int id;
+    int finish;
     state_t state;
 };
 
@@ -94,9 +97,9 @@ void print_graph(graph G) {
         printf("\n");
     }
     printf("vertices:\n");
-    printf("vertex distance pred\n");
+    printf("vertex  distance  pred  finish\n");
     for (i=0;i<G->size;i++) {
-        printf("%d     %d     %d\n",i,G->vertices[i]->distance,G->vertices[i]->prev);
+        printf("%d     %d     %d    %d\n",i,G->vertices[i]->distance,G->vertices[i]->prev,G->vertices[i]->finish);
     }
 }
 
@@ -137,4 +140,43 @@ void graph_bfs(graph G, int source) {
         size = queue_size(Q);
     }
     free(Q);
+}
+
+void graph_dfs(graph G) {
+    int i;
+    
+    /*want to initialize each vertex in graph*/
+    for (i=0;i<G->size;i++) {
+        G->vertices[i] = emalloc(sizeof *G->vertices[i]);
+        G->vertices[i]->state = UNVISITED;
+        G->vertices[i]->prev = -1;
+    }
+
+    /*initialize step and visit all states...*/
+    step = 0;
+    for (i=0;i<G->size;i++) {
+        if (G->vertices[i]->state == UNVISITED) {
+            visit(G,i);
+        }
+    }
 } 
+
+void visit(graph G, int v) {
+    int u;
+    /*we have "stepped" onto v, so set it to "visited", 
+    * at distance step..*/
+    G->vertices[v]->state = VISITED_SELF;
+    /*step again*/
+    step++;
+    G->vertices[v]->distance = step;
+    for (u=0;u<G->size;u++) {
+    /*visit each node u adjacent to v which has not been visited already...*/
+        if(G->edges[v][u]==1 && G->vertices[u]->state==UNVISITED) {
+            G->vertices[u]->prev = v;
+            visit(G, u);
+        }
+    }
+    step++;
+    G->vertices[v]->state = VISITED_ALL;
+    G->vertices[v]->finish = step; 
+}
