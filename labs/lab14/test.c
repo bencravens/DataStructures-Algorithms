@@ -14,11 +14,8 @@ int main(void) {
         b = bst_insert(b,word);
     }
 
-    printf("printing in order\n");
-    bst_inorder(b,print_key);
-    printf("deleting George\n");
-    bst_delete(b, "george");
-    bst_inorder(b,print_key);
+    printf("printing preorder\n");
+    bst_preorder(b,print_key);
     bst_free(b);
 
     return EXIT_SUCCESS;
