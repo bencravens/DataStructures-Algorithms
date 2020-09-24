@@ -69,16 +69,57 @@ void graph_add_edge(graph g, int u, int v) {
 void graph_print_list(graph g) {
     int i;
     int j;
+    int count=0;
+    printf("adjacency list:\n");
     for (i=0;i < g->size;i++) {
+        /*reset count*/
+        count = 0;
         printf("%d | ",i);
         for (j=0;j < g->size;j++) {
             if (g->edges[i][j] == 1) {
-                printf(" %d",j);
+                if (count == 0) {
+                    printf("%d",j);
+                } else {
+                    printf(", %d",j);
+                } 
+                count++;
             }
         }
         printf("\n");
     }
 }
 
+void graph_bfs(graph g, int source) {
+    int i;
+    int u,v;
+    queue q = queue_new();
+    for (i=0; i < g->size; i++) {
+        g->state[i] = UNVISITED;
+        g->distance[i] = -1;
+        g->pred[i] = -1;
+    }
+    g->state[source] = VISITED_SELF;
+    g->distance[source] = 0;
+    enqueue(q, source);
+    while (queue_size(q)!=0) {
+        u = (int)dequeue(q);
+        for (v=0;v < g->size; v++) {
+            /*if v is adjacent to u and v has not been visited...*/
+            if (g->edges[u][v] == 1 && g->state[v] == UNVISITED) {
+                g->state[v] = VISITED_SELF;
+                g->distance[v] = 1 + g->distance[u];
+                g->pred[v] = u;
+                enqueue(q, v);
+            }
+        }
+        g->state[u] = VISITED_DESCENDENTS;
+    }
+}
+
 void graph_print_state(graph g) {
+    int i;
+    printf("vertex distance pred\n");
+    for (i=0; i<g->size; i++) {
+        printf("%5d%7d%6d\n",i,g->distance[i],g->pred[i]);
+    }
 }

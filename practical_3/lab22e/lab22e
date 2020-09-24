@@ -39,10 +39,7 @@ int main(int argc, char** argv) {
         graph_print_list(g);
         printf("\n");
 
-        if (bfs) { 
-            graph_bfs(g,1);
-            graph_print_state(g);
-        }
+        if (bfs) { }
 
         if (dfs) { }
 
