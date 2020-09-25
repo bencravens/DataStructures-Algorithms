@@ -96,11 +96,10 @@ void visit(graph g, int v) {
     g->state[v] = VISITED_SELF;
     step++;
     g->distance[v] = step;
-    for (u=0; u < g->size; u++) {
-        /*for each unvisited vertex u adjacent to v*/
-        if (g->edges[v][u] == 1 && g->state[u] == UNVISITED) {
+    for(u=0;u<g->size;u++) {
+        if (g->state[u]==UNVISITED && g->edges[v][u] == 1) {
             g->pred[u] = v;
-            visit(g, u);
+            visit(g,u);
         }
     }
     step++;
@@ -109,15 +108,15 @@ void visit(graph g, int v) {
 }
 
 void graph_dfs(graph g) {
+    int i;
     int v;
-    for (v=0; v<g->size; v++) {
-        g->state[v] = UNVISITED;
-        g->pred[v] = -1;
+    for (i=0; i<g->size; i++) {
+        g->state[i] = UNVISITED;
+        g->pred[i] = -1;
     }
-    
     step = 0;
     for (v=0; v<g->size; v++) {
-        if (g->state[v] == UNVISITED) {
+        if (g->state[v] == UNVISITED) {    
             visit(g,v);
         }
     }
