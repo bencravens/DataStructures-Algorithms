@@ -18,9 +18,9 @@ struct queue {
 
 queue queue_new() {
     queue q = emalloc(sizeof *q);
+    q->length = 0;
     q->first = NULL;
     q->last = NULL;
-    q->length = 0;
     return q;
 }
 
@@ -41,21 +41,21 @@ double dequeue(queue q) {
     q_item temp;
     double item;
     if (q->length == 0) {
-        fprintf(stderr, "cannot dequeue, empty queue\n");
         exit(EXIT_FAILURE);
+    } else {
+        item = q->first->item;
+        temp = q->first->next;
+        free(q->first);
+        q->first = temp;
+        q->length--;
+        return item;
     }
-    temp = q->first->next;
-    item = q->first->item;
-    free(q->first);
-    q->first = temp;
-    q->length--;
-    return item;
 }
 
 void queue_print(queue q) { 
-    int i;
-    q_item temp = q->first;
-    for (i=0;i<q->length;i++) {
+    q_item temp;
+    temp = q->first;
+    while(temp!=NULL) {
         printf("%.2f\n",temp->item);
         temp = temp->next;
     }
@@ -75,20 +75,20 @@ int queue_size(queue q) {
 }
 
 void queue_free_aux(q_item i) {
-    i->next = NULL;
     free(i);
 }
 
 queue queue_free(queue q) {
-    q_item myq;
+    q_item myitem;
     q_item temp;
-    myq = q->first;
-    while (myq->next != NULL) {
-        temp = myq->next;
-        queue_free_aux(myq);
-        myq = temp;
-    }  
-    free(myq);
+    myitem = q->first;
+    while (myitem!=NULL) {
+        temp = myitem->next;
+        free(myitem);
+        myitem = temp;
+    }
+    free(temp);
+    free(myitem);
     free(q);
-    return q;
+    return(q);
 }
