@@ -28,8 +28,8 @@ htable htable_new(int capacity) {
     htable h = emalloc(sizeof *h);
     h->capacity = capacity;
     h->num_keys = 0;
-    h->keys = emalloc(h->capacity * sizeof h->keys[0]);
-    for (i=0; i < h->capacity; i++) {
+    h->keys = emalloc(capacity * sizeof h->keys[0]);
+    for (i=0; i<capacity; i++) {
         h->keys[i] = NULL;
     }
     return h;
@@ -37,57 +37,49 @@ htable htable_new(int capacity) {
 
 void htable_free(htable h) {
     int i;
-    for (i=0; i < h->capacity; i++) {
+    for (i=0; i<h->capacity; i++) {
         free(h->keys[i]);
     }
     free(h->keys);
     free(h);
-    h = NULL;
 }
 
 int htable_insert(htable h, char* key) {
-    /*generate index based on string by hashing*/
-    int i;
-    int index;
-    i = htable_word_to_int(key);
-    index = htable_hash(h,i);
-    /*if the index we have hashed is empty, simply insert.*/
-    if (h->keys[index] == NULL) {
+    int ind = htable_word_to_int(key);
+    int index = htable_hash(h,ind);
+    if (h->keys[index]==NULL) {
+        /*htable free at this index, just insert.*/
         h->keys[index] = emalloc((strlen(key)+1) * sizeof key[0]);
         strcpy(h->keys[index],key);
         h->num_keys++;
         return 1;
     } else if (strcmp(h->keys[index],key)==0) {
-        /*key already exists at this index. do nothing 
-         * as we are not storing frequencies */
         return 0;
     } else {
-        /*A collision has occured. Insert key at next
-         * available index. search the entire hash table
-         * if need be by wrapping around*/
-        i = index + 1;
-        while ((i % h->capacity) != index) {
-            fprintf(stderr, "i is %d, i mod capacity is %d, index is %d\n",i, i % h->capacity, index);
-            if (h->keys[i % h->capacity] == NULL) {
-                h->keys[i % h->capacity] = emalloc((strlen(key)+1) * sizeof key[0]);
-                strcpy(h->keys[i % h->capacity],key);
+        ind = index + 1;
+        while ((ind % h->capacity) != index) {
+            if (h->keys[ind % h->capacity] == NULL) {
+                h->keys[ind % h->capacity] = emalloc((strlen(key)+1) * sizeof key[0]);
+                strcpy(h->keys[ind % h->capacity], key);
+                h->num_keys++;
                 return 1;
-            } else if (strcmp(h->keys[i % h->capacity],key)==0) {
-                ;
+            } else if (strcmp(h->keys[ind % h->capacity],key)==0) {
+                return 0;
             } else {
-                i++;
+                ind++;
             }
         }
-        /*we have failed to insert.*/
         return 0;
     }
-    /*should not reach here. */
-    return 0;
 }
 
 void htable_print(htable h, FILE* stream) {
     int i;
-    for (i=0;i<h->capacity;i++) {
-        fprintf(stream, "%2d %s\n", i, h->keys[i] == NULL ? "" : h->keys[i]);
+    for (i=0; i<h->capacity; i++) {
+        if (h->keys[i]==0) {
+            fprintf(stream, "%2d \n",i);
+        } else {
+            fprintf(stream, "%2d %s\n",i,h->keys[i]);
+        }
     }
 }
