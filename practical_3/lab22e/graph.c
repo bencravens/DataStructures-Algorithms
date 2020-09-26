@@ -12,19 +12,13 @@ struct graphrec {
     int size;
     int* pred;
     int* distance;
-    int* finish;
     state_t* state;
+    int* finish;
 };
 
 graph graph_new(int num_vertices) {
-    int i, j;
+    int i,j;
     graph g = emalloc(sizeof *g);
-    g->size = num_vertices;
-    g->pred = emalloc(num_vertices * sizeof g->pred[0]);
-    g->distance = emalloc(num_vertices * sizeof g->distance[0]);
-    g->finish = emalloc(num_vertices * sizeof g->finish[0]);
-    g->state = emalloc(num_vertices * sizeof g->state[0]);
-    /*have to allocate memory for vector of rows... (edge matrix)*/
     g->edges = emalloc(num_vertices * sizeof g->edges[0]);
     for (i=0; i<num_vertices; i++) {
         g->edges[i] = emalloc(num_vertices * sizeof g->edges[0][0]);
@@ -32,19 +26,24 @@ graph graph_new(int num_vertices) {
             g->edges[i][j] = 0;
         }
     }
+    g->size = num_vertices;
+    g->pred = emalloc(num_vertices * sizeof g->pred[0]);
+    g->distance = emalloc(num_vertices * sizeof g->distance[0]);
+    g->state = emalloc(num_vertices * sizeof g->state[0]);
+    g->finish = emalloc(num_vertices * sizeof g->finish[0]);
     return g;
 }
 
 graph graph_free(graph g) {
     int i;
-    for (i=0;i<g->size;i++) {
+    for (i=0; i<g->size; i++) {
         free(g->edges[i]);
     }
     free(g->edges);
+    free(g->pred);
+    free(g->distance);
     free(g->state);
     free(g->finish);
-    free(g->distance);
-    free(g->pred);
     free(g);
     return g;
 }
@@ -59,17 +58,16 @@ void graph_add_edge(graph g, int u, int v) {
 }
 
 void graph_print_list(graph g) {
-    int i;
-    int j;
-    int count = 0;
+    int i,j;
+    int count;
     printf("adjacency list:\n");
-    for (i=0; i < g->size; i++) {
+    for (i=0; i<g->size; i++) {
         count = 0;
-        printf("%d | ",i);
-        for (j=0; j < g->size; j++) {
+        printf("%d |",i);
+        for (j=0; j<g->size; j++) {
             if (g->edges[i][j] == 1) {
                 if (count==0) {
-                    printf("%d",j);
+                    printf(" %d",j);
                 } else {
                     printf(", %d",j);
                 }
@@ -81,10 +79,9 @@ void graph_print_list(graph g) {
 }
 
 void graph_bfs(graph g, int source) {
-    int i;
-    int u,v;
+    int i,u,v;
     queue q = queue_new();
-    for (i=0;i<g->size;i++) {
+    for (i=0; i<g->size; i++) {
         g->state[i] = UNVISITED;
         g->distance[i] = -1;
         g->pred[i] = -1;
@@ -93,9 +90,9 @@ void graph_bfs(graph g, int source) {
     g->distance[source] = 0;
     enqueue(q,source);
     while (queue_size(q)!=0) {
-        u = (int)dequeue(q);
-        for (v=0; v<g->size; v++) {
-            if (g->state[v]==UNVISITED && g->edges[u][v]==1) {
+        u = dequeue(q);
+        for (v=0;v<g->size;v++) {
+            if (g->edges[u][v]==1 && g->state[v]==UNVISITED) {
                 g->state[v] = VISITED_SELF;
                 g->distance[v] = 1 + g->distance[u];
                 g->pred[v] = u;
