@@ -4,7 +4,7 @@
 #include "bst.h"
 #include "mylib.h"
 
-struct bst_node {
+struct bst_node { 
     char* key;
     bst left;
     bst right;
@@ -15,27 +15,29 @@ bst bst_new() {
 }
 
 void bst_preorder(bst b, void f(char* str)) {
-    if (b == NULL) {
+    if (b==NULL) {
         return;
-    } 
-    f(b->key);
-    bst_preorder(b->left, f);
-    bst_preorder(b->right, f);
+    } else {
+        f(b->key);
+        bst_preorder(b->left,f);
+        bst_preorder(b->right,f);
+    }
 }
 
 void bst_inorder(bst b, void f(char* str)) {
-    if (b == NULL) {
+    if (b==NULL) {
         return;
+    } else {
+        bst_inorder(b->left,f);
+        f(b->key);
+        bst_inorder(b->right,f);
     }
-    bst_inorder(b->left, f);
-    f(b->key);
-    bst_inorder(b->right, f);
 }
 
 bst bst_insert(bst b, char* str) {
-    if (b == NULL) {
+    if (b==NULL) {
         b = emalloc(sizeof *b);
-        b->key = emalloc((strlen(str) + 1) * sizeof str[0]);
+        b->key = emalloc((strlen(str)+1) * sizeof str[0]);
         strcpy(b->key,str);
         b->left = NULL;
         b->right = NULL;
@@ -48,7 +50,7 @@ bst bst_insert(bst b, char* str) {
 }
 
 int bst_search(bst b, char* str) {
-    if (b==NULL) {
+    if (b == NULL) {
         return 0;
     } else if (strcmp(b->key,str)==0) {
         return 1;
@@ -61,13 +63,13 @@ int bst_search(bst b, char* str) {
 }
 
 bst bst_free(bst b) {
-    if (b==NULL) {
+    if (b == NULL) {
         return b;
     } else {
         b->left = bst_free(b->left);
         b->right = bst_free(b->right);
         free(b->key);
         free(b);
-        return b;
     }
+    return b;
 }   
