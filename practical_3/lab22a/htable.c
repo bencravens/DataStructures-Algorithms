@@ -37,7 +37,7 @@ htable htable_new(int capacity) {
 
 void htable_free(htable h) {
     int i;
-    for (i=0; i<h->capacity; i++) {
+    for (i=0;i<h->capacity;i++) {
         free(h->keys[i]);
     }
     free(h->keys);
@@ -45,41 +45,45 @@ void htable_free(htable h) {
 }
 
 int htable_insert(htable h, char* key) {
-    int ind = htable_word_to_int(key);
-    int index = htable_hash(h,ind);
+    int i;
+    int index;
+    int cap = h->capacity;
+    i = htable_word_to_int(key);
+    index = htable_hash(h,i);
     if (h->keys[index]==NULL) {
-        /*htable free at this index, just insert.*/
         h->keys[index] = emalloc((strlen(key)+1) * sizeof key[0]);
         strcpy(h->keys[index],key);
         h->num_keys++;
         return 1;
-    } else if (strcmp(h->keys[index],key)==0) {
+    } else if (strcmp(h->keys[index],key) == 0) {
         return 0;
     } else {
-        ind = index + 1;
-        while ((ind % h->capacity) != index) {
-            if (h->keys[ind % h->capacity] == NULL) {
-                h->keys[ind % h->capacity] = emalloc((strlen(key)+1) * sizeof key[0]);
-                strcpy(h->keys[ind % h->capacity], key);
+        fprintf(stderr,"inserting %s\n",key);
+        i = index+1;
+        while ((i % cap)!=index) {
+            if (h->keys[(i % cap)]==NULL) {
+                h->keys[(i % cap)] = emalloc((strlen(key)+1) * sizeof key[0]);
+                strcpy(h->keys[(i % cap)],key);
                 h->num_keys++;
                 return 1;
-            } else if (strcmp(h->keys[ind % h->capacity],key)==0) {
+            } else if (strcmp(h->keys[(i % cap)],key) == 0) {
                 return 0;
             } else {
-                ind++;
+                i++;
             }
         }
         return 0;
     }
+    return 0;
 }
 
 void htable_print(htable h, FILE* stream) {
     int i;
     for (i=0; i<h->capacity; i++) {
-        if (h->keys[i]==0) {
-            fprintf(stream, "%2d \n",i);
+        if (h->keys[i]!=NULL) {
+            fprintf(stream,"%2d %s\n",i,h->keys[i]);
         } else {
-            fprintf(stream, "%2d %s\n",i,h->keys[i]);
+            fprintf(stream,"%2d \n",i);
         }
     }
 }
