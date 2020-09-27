@@ -22,7 +22,7 @@ graph graph_new(int num_vertices) {
     g->edges = emalloc(num_vertices * sizeof g->edges[0]);
     for (i=0; i<num_vertices; i++) {
         g->edges[i] = emalloc(num_vertices * sizeof g->edges[0][0]);
-        for (j=0; j < num_vertices; j++) {
+        for (j=0; j<num_vertices; j++) {
             g->edges[i][j] = 0;
         }
     }
@@ -58,16 +58,17 @@ void graph_add_edge(graph g, int u, int v) {
 }
 
 void graph_print_list(graph g) {
-    int i,j;
+    int i;
+    int j;
     int count;
     printf("adjacency list:\n");
     for (i=0; i<g->size; i++) {
-        count = 0;
-        printf("%d |",i);
+        count=0;
+        printf("%d | ",i);
         for (j=0; j<g->size; j++) {
-            if (g->edges[i][j] == 1) {
+            if (g->edges[i][j]==1) {
                 if (count==0) {
-                    printf(" %d",j);
+                    printf("%d",j);
                 } else {
                     printf(", %d",j);
                 }
@@ -79,7 +80,8 @@ void graph_print_list(graph g) {
 }
 
 void graph_bfs(graph g, int source) {
-    int i,u,v;
+    int i;
+    int u,v;
     queue q = queue_new();
     for (i=0; i<g->size; i++) {
         g->state[i] = UNVISITED;
@@ -89,15 +91,15 @@ void graph_bfs(graph g, int source) {
     g->state[source] = VISITED_SELF;
     g->distance[source] = 0;
     enqueue(q,source);
-    while (queue_size(q)!=0) {
-        u = dequeue(q);
-        for (v=0;v<g->size;v++) {
+    while (queue_size(q)>0) {
+        u = (int)dequeue(q);
+        for (v=0; v<g->size; v++) {
             if (g->edges[u][v]==1 && g->state[v]==UNVISITED) {
                 g->state[v] = VISITED_SELF;
                 g->distance[v] = 1 + g->distance[u];
                 g->pred[v] = u;
                 enqueue(q,v);
-            }
+             }
         }
         g->state[u] = VISITED_DESCENDANTS;
     }
@@ -106,7 +108,7 @@ void graph_bfs(graph g, int source) {
 void graph_print_state(graph g) {
     int i;
     printf("vertex distance pred\n");
-    for (i=0;i<g->size;i++) {
+    for (i=0; i<g->size; i++) {
         printf("%5d%7d%6d\n",i,g->distance[i],g->pred[i]);
     }
 }
