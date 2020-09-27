@@ -11,9 +11,9 @@ struct q_item {
 };
 
 struct queue {
+    int length;
     q_item first;
     q_item last;
-    int length;
 };
 
 queue queue_new() {
@@ -38,25 +38,25 @@ void enqueue(queue q, double item) {
 }
 
 double dequeue(queue q) {
-    double result;
-    q_item q_temp;
-    if (q->length > 0) {
-        result = q->first->item;
-        q_temp = q->first->next;
+    double item;
+    q_item temp;
+    if (q->length>0) {
+        item = q->first->item;
+        temp = q->first->next;
         free(q->first);
-        q->first = q_temp;
+        q->first = temp;
         q->length--;
-        return result;
+        return item;
     } else {
         exit(EXIT_FAILURE);
     }
 }
 
 void queue_print(queue q) { 
-    q_item q_temp = q->first;
-    while (q_temp!=NULL) {
-        printf("%.2f\n",q_temp->item);
-        q_temp = q_temp->next;
+    q_item temp=q->first;
+    while(temp!=NULL) {
+        printf("%.2f\n",temp->item);
+        temp=temp->next;
     }
 }
 
@@ -78,9 +78,9 @@ void queue_free_aux(q_item i) {
 }
 
 queue queue_free(queue q) {
-    q_item iter = q->first;
+    q_item iter=q->first;
     q_item temp;
-    while(iter->next!=NULL) {
+    while(iter!=NULL) {
         temp = iter->next;
         free(iter);
         iter = temp;
