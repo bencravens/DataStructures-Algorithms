@@ -34,7 +34,7 @@ void selection_sort(char** a, int n){
         /*grab an element*/
         for (i=p;i<n;i++){
             /*find the smallest item to the right of that element*/
-            if (strcmp(a[i],a[min])<0) {
+            if (strcasecmp(a[i],a[min])<0) {
                 min = i;
             }
         }
@@ -60,7 +60,7 @@ int main(void) {
     selection_sort(wordlist,num_words);
     
     for (i=0; i<num_words; i++) {
-        printf("word %d starts with %s\n",i,wordlist[i][0]);
+        printf("%s\n",wordlist[i]);
     }
     
     for (i=0; i<num_words; i++){
