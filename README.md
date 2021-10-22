@@ -5,7 +5,7 @@ Some of the things I implemented:
 
 
 - Mergesort 
-- Quicksort analysis
+- Quicksort
 - Hash Table
 - Binary search tree
 - Red-black tree
