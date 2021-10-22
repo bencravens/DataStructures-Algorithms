@@ -11,5 +11,6 @@ Some of the things I implemented:
 - Red-black tree
 - Graph
 - Queue
+- Linked list
 
 All are implemented in C.
